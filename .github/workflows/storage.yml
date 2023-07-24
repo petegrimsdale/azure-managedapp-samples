@@ -79,12 +79,12 @@ jobs:
             --auth-mode login \
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
             --container-name ${{ env.CONTAINER_NAME }} \
-            --name main.portal.json \
+            --name createUiDefinition.json \
             --output tsv)
           portalsas=$(az storage blob generate-sas \
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
             --container-name ${{ env.CONTAINER_NAME }} \
-            --name main.portal.json \
+            --name createUiDefinition.json \
             --permissions r \
             --expiry $expiry_date \
             --https-only \
