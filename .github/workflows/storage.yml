@@ -73,7 +73,7 @@ jobs:
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
             --container-name ${{ env.CONTAINER_NAME }} \
             --file pg_templates/managed_storage/createUiDefinition.json \
-            --name creatUiDefinition.json \
+            --name createUiDefinition.json \
             --overwrite true
           portalurl=$(az storage blob url \
             --auth-mode login \
