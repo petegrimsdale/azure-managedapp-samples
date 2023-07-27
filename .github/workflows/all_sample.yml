@@ -44,8 +44,8 @@ jobs:
       - name: Check custom deployment wiring
         run: ./.github/scripts/check_templates_wiring.py
         env:
-          MAIN_TEMPLATE_PATH: templates/${{ github.event.inputs.templatePath }}/main.json
-          UI_TEMPLATE_PATH: templates/${{ github.event.inputs.templatePath }}/createUiDefinition.json
+          MAIN_TEMPLATE_PATH: pg_templates/${{ github.event.inputs.templatePath }}/main.json
+          UI_TEMPLATE_PATH: pg_templates/${{ github.event.inputs.templatePath }}/createUiDefinition.json
 
       - name: Upload templates to storage account
         id: upload
