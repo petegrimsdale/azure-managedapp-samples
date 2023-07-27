@@ -1,17 +1,17 @@
-name: Publish vm sample template
+name: Generic Publish template
 
 on:
-  push:
-    paths:
-      - "templates/**"
   workflow_dispatch:
     inputs:
       templatePath:
         description: 'Template path'
         default: 'managed_storage'
+      storageAccount:
+        description: 'storage account name'
+        default: 'pegrimtemplates'
 
 env:
-  TEMPLATES_STORAGE_ACCOUNT_NAME: templatestracct
+  TEMPLATES_STORAGE_ACCOUNT_NAME: ${{ github.event.inputs.storageAccount }}
 
 jobs:
   publish:
