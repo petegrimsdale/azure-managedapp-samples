@@ -9,6 +9,9 @@ on:
       storageAccount:
         description: 'storage account name'
         default: 'pegrimtemplates'
+      containerSuffix:
+        description: 'container name suffix'
+        default: '001'
 
 env:
   TEMPLATES_STORAGE_ACCOUNT_NAME: ${{ github.event.inputs.storageAccount }}
@@ -32,7 +35,7 @@ jobs:
           az storage container create \
             --auth-mode login \
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
-            --name ${{ env.CONTAINER_NAME }}${{ github.event.inputs.templatePath }}
+            --name ${{ env.CONTAINER_NAME }}${{ github.event.inputs.containerSuffix }}
 
       - name: Build Bicep templates
         run: |
