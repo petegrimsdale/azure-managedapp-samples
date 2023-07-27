@@ -1,0 +1,192 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "config": {
+      "isWizard": true,
+      "basics": {
+        "subscription": {
+          "constraints": {
+            "validations": []
+          },
+          "resourceProviders": [
+            "Microsoft.Compute"
+          ]
+        },
+        "location": {
+          "allowedValues": [],
+          "visible": true
+        },
+        "resourceGroup": {
+          "constraints": {
+            "validations": [
+              {
+                "permission": "Microsoft.ContainerService/managedClusters/write",
+                "message": "Must have permission to create AKS clusters."
+              },
+              {
+                "permission": "Microsoft.OperationalInsights/workspaces/write",
+                "message": "Must have permission to create Log Analytics workspaces."
+              },
+              {
+                "permission": "Microsoft.Network/virtualNetworks/subnets/write",
+                "message": "Must have permission to create subnets."
+              },
+              {
+                "permission": "Microsoft.Network/virtualNetworks/write",
+                "message": "Must have permission to create virtual networks."
+              },
+              {
+                "permission": "Microsoft.Resources/deployments/write",
+                "message": "Must have permission to create deployments."
+              }
+            ]
+          }
+        }
+      }
+    },
+    "basics": [],
+    "steps": [
+      {
+        "name": "nwConfig",
+        "label": "Networking",
+        "elements": [
+          {
+            "name": "infoMessage",
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true,
+            "options": {
+              "icon": "Info",
+              "text": "Please enter your required Network Configuration options"
+            }
+          },
+          {
+            "name": "vnetConfig",
+            "type": "Microsoft.Network.VirtualNetworkCombo",
+            "label": {
+              "virtualNetwork": "Virtual network",
+              "subnets": "Subnets"
+            },
+            "toolTip": {
+              "virtualNetwork": "Select or Create the required VNet",
+              "subnets": "Select or create the required subnets"
+            },
+            "defaultValue": {
+              "name": "demo-vnet",
+              "addressPrefixSize": "/23"
+            },
+            "constraints": {
+              "minAddressPrefixSize": "/23"
+            },
+            "options": {
+              "hideExisting": false
+            },
+            "subnets": {
+              "subnet1": {
+                "label": "AKS Subnet",
+                "defaultValue": {
+                  "name": "aks-subnet",
+                  "addressPrefixSize": "/25"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/25",
+                  "requireContiguousAddresses": true
+                }
+              },
+              "subnet2": {
+                "label": "Virtual Machine Subnet",
+                "defaultValue": {
+                  "name": "vm-subnet",
+                  "addressPrefixSize": "/26"
+                },
+                "constraints": {
+                  "minAddressPrefixSize": "/26",
+                  "requireContiguousAddresses": true
+                }
+              }
+            },
+            "visible": true
+          },
+          {
+            "name": "aksnetworktype",
+            "type": "Microsoft.Common.OptionsGroup",
+            "label": "Azure Kubernetes Networking Type",
+            "defaultValue": "Azure",
+            "toolTip": "AKS network type",
+            "constraints": {
+              "allowedValues": [
+                {
+                  "label": "Azure",
+                  "value": "azure"
+                },
+                {
+                  "label": "Kubenet",
+                  "value": "kubenet"
+                }
+              ],
+              "required": true
+            },
+            "visible": true
+          }
+        ]
+      },
+      {
+        "name": "projectOptions",
+        "label": "Project Options",
+        "elements": [
+          {
+            "name": "infraMessage",
+            "type": "Microsoft.Common.InfoBox",
+            "visible": true,
+            "options": {
+              "icon": "Info",
+              "text": "Please enter your required infrastructure options"
+            }
+          },
+          {
+            "name": "projectName",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Azure resources prefix",
+            "placeholder": "",
+            "defaultValue": "demo",
+            "toolTip": "Use only the allowed characters",
+            "constraints": {
+              "required": true,
+              "regex": "^[a-z0-9A-Z]{1,10}$",
+              "validationMessage": "Only alphanumeric characters are allowed, and the value must be 1-10 characters long."
+            },
+            "visible": true
+          }
+        ]
+      },
+      {
+        "name": "tags",
+        "label": "Tags",
+        "elements": [
+          {
+            "name": "tagsByResource",
+            "toolTip": "Enter required Tags",
+            "type": "Microsoft.Common.TagsByResource",
+            "resources": [
+              "Microsoft.Compute/virtualMachines"
+            ]
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "virtualNetworkNewOrExisting": "[steps('nwConfig').vnetConfig.newOrExisting]",
+      "virtualNetworkName": "[steps('nwConfig').vnetConfig.name]",
+      "virtualNetworkAddressPrefix": "[steps('nwConfig').vnetConfig.addressPrefixes]",
+      "virtualNetworkResourceGroup": "[steps('nwConfig').vnetConfig.resourceGroup]",
+      "aksSubnetAddressPrefix": "[steps('nwConfig').vnetConfig.subnets.subnet1.addressPrefix]",
+      "vmSubnetAddressPrefix": "[steps('nwConfig').vnetConfig.subnets.subnet2.addressPrefix]",
+      "aksSubnetName": "[steps('nwConfig').vnetConfig.subnets.subnet1.name]",
+      "vmSubnetName": "[steps('nwConfig').vnetConfig.subnets.subnet2.name]",
+      "projectName": "[steps('projectOptions').projectName]",
+      "tags": "[steps('tags').tagsByResource]",
+      "location": "[location()]"
+    }
+  }
+}
