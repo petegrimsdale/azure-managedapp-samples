@@ -85,13 +85,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-08-03-preview' = {
       dnsServiceIP: dnsServiceIP
       dockerBridgeCidr: dockerBridgeCidr
       loadBalancerSku: 'standard'
-      kubeProxyConfig:{
-        enabled: true
-        mode: 'IPVS'
-        ipvsConfig:{
-          scheduler:'LeastConnection'
-        }
-      }
     }
     securityProfile:{
       workloadIdentity:{
