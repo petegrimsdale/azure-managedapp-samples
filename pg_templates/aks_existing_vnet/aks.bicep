@@ -28,7 +28,6 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-08-03-preview' = {
   properties: {
     nodeResourceGroup: nodeResourceGroup
     dnsPrefix: dnsPrefix
-    kubernetesVersion: '1.24.6'
     oidcIssuerProfile:{
       enabled:true
     }
