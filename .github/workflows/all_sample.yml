@@ -57,7 +57,7 @@ jobs:
             --auth-mode login \
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
             --container-name ${{ env.CONTAINER_NAME }} \
-            --file templates/${{ github.event.inputs.templatePath }}/main.json \
+            --file pg_templates/${{ github.event.inputs.templatePath }}/main.json \
             --name main.json \
             --overwrite true
           templateurl=$(az storage blob url \
@@ -79,7 +79,7 @@ jobs:
             --auth-mode login \
             --account-name ${{ env.TEMPLATES_STORAGE_ACCOUNT_NAME }} \
             --container-name ${{ env.CONTAINER_NAME }} \
-            --file templates/${{ github.event.inputs.templatePath }}/createUiDefinition.json \
+            --file pg_templates/${{ github.event.inputs.templatePath }}/createUiDefinition.json \
             --name createUiDefinition.json \
             --overwrite true
           portalurl=$(az storage blob url \
